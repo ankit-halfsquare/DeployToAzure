@@ -78,10 +78,26 @@ WSGI_APPLICATION = 'demoProject.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
-DATABASES = {
+if os.getenv('DB_NAME', ''):
+    DATABASES = {
+        'default': {
+            'ENGINE': "mssql",
+            # 'ENGINE': "sql_server.pyodbc",
+            'NAME':  os.getenv('DB_NAME'),
+            'USER':  os.getenv('DB_USER'),
+            'PASSWORD': os.getenv('DB_PASSWORD'),
+            'HOST':  os.getenv('DB_HOST'),   # Or an IP Address that your DB is hosted on
+            'PORT': '1433',
+            'OPTIONS': {
+                'driver': 'ODBC Driver 18 for SQL Server',
+            },
+        }
+    }
+else:
+    DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'NAME': 'db.sqlite3',
     }
 }
 
